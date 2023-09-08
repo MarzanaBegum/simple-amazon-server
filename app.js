@@ -11,28 +11,28 @@ require("dotenv").config();
 dbConnect();
 dbDisconnect()
 
-// const allowedOrigins = [
-//   "http://localhost:8080",
-//   // Add more trusted origins as needed
-// ];
+const allowedOrigins = [
+  "http://localhost:3000",
+  // Add more trusted origins as needed
+];
 
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   credentials: true,
-//   maxAge: 3600,
-// };
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  maxAge: 3600,
+};
 
 //middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use("/api/auth",require("./routes/AuthRoutes"))
 app.use("/api/user",require("./routes/UserRoutes"))

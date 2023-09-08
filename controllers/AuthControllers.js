@@ -1,10 +1,11 @@
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
 const { SignInValidate, User, SignupValidate } = require("../models/UserModel");
 const { EncryptData, MatchPassword, PasswordHash } = require("../utils");
 const { StatusError } = require("../utils/error");
 const bcrypt = require("bcrypt");
 
 const handleSignUp = async (req, res) => {
-  console.log(req.body)
   // validate body
   const { value, error } = await SignupValidate(req.body);
   if (error) throw StatusError(error.message, 400);
@@ -36,8 +37,41 @@ const handleSignIn = async (req, res) => {
   if (!isMatchPass) throw StatusError("Invalid credentials", 401);
 
   const token = EncryptData({ id: user._id });
-  res.status(200).send({ token,user, message: "Login successfull" });
+  res.status(200).send({ token, user, message: "Login successfull" });
 };
 
+const updateUserSchema = Joi.object({
+  name: Joi.string().label("Name"),
+  email: Joi.string().email().label("Email"),
+  password: passwordComplexity()
+    .label("Password")
+    .error(
+      StatusError(
+        "Your password must be at least 8 characters long, contain a mixture of number,symbol,uppercase and lowercase letters.",
+        400
+      )
+    ),
+});
 
-module.exports = { handleSignIn, handleSignUp };
+const handleUpdateUser = async (req, res) => {
+  const { value, error } = await updateUserSchema.validate(req.body);
+  if (error) throw StatusError(error.message, 400);
+
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) throw StatusError("User not found", 404);
+
+  if (req.body.password) {
+    req.body.password = await PasswordHash(req.body.password);
+  }
+
+  const updatedUser = await User.findOneAndUpdate(
+    { email: req.body.email },
+    req.body,
+    {
+      new: true,
+    }
+  );
+  res.status(200).send(updatedUser);
+};
+
+module.exports = { handleSignIn, handleSignUp, handleUpdateUser };
