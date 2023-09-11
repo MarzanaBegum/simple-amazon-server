@@ -4,6 +4,6 @@ const router = require("express").Router();
 
 router.post("/signin",handleSignIn)
 router.post("/signup",handleSignUp)
-router.put("/user",handleUpdateUser)
+router.put("/:userId",handleUpdateUser)
 
 module.exports = router;

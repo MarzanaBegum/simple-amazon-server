@@ -57,7 +57,7 @@ const handleUpdateUser = async (req, res) => {
   const { value, error } = await updateUserSchema.validate(req.body);
   if (error) throw StatusError(error.message, 400);
 
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ _id: req.params.userId});
   if (!user) throw StatusError("User not found", 404);
 
   if (req.body.password) {
@@ -65,7 +65,7 @@ const handleUpdateUser = async (req, res) => {
   }
 
   const updatedUser = await User.findOneAndUpdate(
-    { email: req.body.email },
+    { _id: req.params.userId },
     req.body,
     {
       new: true,
