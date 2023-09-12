@@ -9,10 +9,11 @@ require("dotenv").config();
 
 //database connection
 dbConnect();
-dbDisconnect()
+dbDisconnect();
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "https://simple-amazon-client.vercel.app",
   // Add more trusted origins as needed
 ];
 
@@ -34,10 +35,10 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
-app.use("/api/auth",require("./routes/AuthRoutes"))
-app.use("/api/user",require("./routes/UserRoutes"))
-app.use("/api/products",require("./routes/ProductRoutes"))
-app.use("/api/order",require("./routes/OrderRoutes"))
+app.use("/api/auth", require("./routes/AuthRoutes"));
+app.use("/api/user", require("./routes/UserRoutes"));
+app.use("/api/products", require("./routes/ProductRoutes"));
+app.use("/api/order", require("./routes/OrderRoutes"));
 
 app.listen(process.env.PORT || 8080, () => {
   console.log("Server is running on port " + process.env.PORT);

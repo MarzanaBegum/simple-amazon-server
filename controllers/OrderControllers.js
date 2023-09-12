@@ -31,10 +31,11 @@ const handleGetOrder = async (req, res) => {
 };
 
 const handleUpdateOrder = async (req, res) => {
-  console.log(req.body, "body......");
   let findOrder = await Order.findOne({ _id: req.params.orderId });
   if (!findOrder) throw StatusError("No order found", 404);
+
   if (findOrder.isPaid) throw StatusError("Order is already paid", 400);
+  
   findOrder.isPaid = true;
   findOrder.paidAt = Date.now();
   findOrder.paymentResult = {
