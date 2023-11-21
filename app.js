@@ -12,7 +12,7 @@ dbConnect();
 dbDisconnect();
 
 const allowedOrigins = [
-  "http://localhost:3000",
+  // "http://localhost:3000",
   "https://simple-amazon-client.vercel.app",
   // Add more trusted origins as needed
 ];
