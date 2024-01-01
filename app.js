@@ -35,6 +35,9 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
+app.get("/", (req, res) => {
+  res.send("This is a GET request");
+});
 app.use("/api/auth", require("./routes/AuthRoutes"));
 app.use("/api/user", require("./routes/UserRoutes"));
 app.use("/api/products", require("./routes/ProductRoutes"));
